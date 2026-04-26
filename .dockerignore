@@ -1,0 +1,41 @@
+# 依存関係
+node_modules
+npm-debug.log
+
+# 環境変数（本番環境ではApp Runnerの環境変数を使用）
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# ドキュメント
+README.md
+*.md
+
+# テスト
+test
+tests
+*.test.js
+*.spec.js
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログ
+logs
+*.log
+
+# 一時ファイル
+tmp
+temp
