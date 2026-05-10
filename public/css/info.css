@@ -1,0 +1,112 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.header {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.header h1 {
+    color: #333;
+    font-size: 24px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.user-email {
+    color: #666;
+    font-size: 14px;
+}
+.logout-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+.logout-btn:hover {
+    background: #ff5252;
+}
+.events-container {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.events-header h2 {
+    color: #333;
+    font-size: 20px;
+}
+.event-count {
+    background: #667eea;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+.event-list {
+    list-style: none;
+}
+.event-item {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+    transition: background 0.2s;
+}
+.event-item:last-child {
+    border-bottom: none;
+}
+.event-date {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+.event-title {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.event-link {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+.event-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+.no-events {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+    font-size: 16px;
+}
+.loading {
+    text-align: center;
+    color: #999;
+    padding: 40px;
+    font-size: 16px;
+}
+.logo {
+    font-size: 24px;
+    margin-right: 10px;
+}

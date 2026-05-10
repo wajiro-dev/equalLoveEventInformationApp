@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>=LOVEイベント情報アプリ</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/info.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="logo">💜</span>=LOVEイベント情報アプリ</h1>
+            <div class="user-info">
+                <span class="user-email"><%= user.email %></span>
+                <a href="/logout" class="logout-btn">ログアウト</a>
+            </div>
+        </div>
+        
+        <div class="events-container">
+            <div class="events-header">
+                <h2>FC先行イベント情報</h2>
+                <span class="event-count"><%= events.length %>件</span>
+            </div>
+            
+            <% if (events.length === 0) { %>
+                <div class="no-events">
+                    イベント情報が見つかりませんでした。
+                </div>
+            <% } else { %>
+                <ul class="event-list">
+                    <% events.forEach(event => { %>
+                        <li class="event-item">
+                            <div class="event-date"><%= event.date %></div>
+                            <div class="event-title"><%= event.title %></div>
+                            <a href="<%= event.href %>" target="_blank" class="event-link">詳細を見る →</a>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+</html>

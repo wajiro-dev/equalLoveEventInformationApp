@@ -12,6 +12,7 @@ app.set('trust proxy', 1);
 // ミドルウェア設定
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
@@ -97,20 +98,20 @@ async function fetchEventInfo() {
 }
 
 // ルート
-app.get('/', async (req, res) => {
+app.get('/info', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
 
     try {
         const events = await fetchEventInfo();
-        res.render('index', { 
+        res.render('info', { 
             user: req.session.user,
             events: events
         });
     } catch (error) {
         console.error('イベント取得エラー:', error);
-        res.render('index', { 
+        res.render('info', { 
             user: req.session.user,
             events: []
         });
@@ -185,7 +186,7 @@ app.get('/callback', async (req, res) => {
         
         delete req.session.codeVerifier;
 
-        res.redirect('/');
+        res.redirect('/info');
     } catch (error) {
         console.error('コールバックエラー:', error);
         res.redirect('/login?error=auth_failed');
