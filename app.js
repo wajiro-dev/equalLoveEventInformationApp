@@ -7,6 +7,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set('trust proxy', 1);
+
 // ミドルウェア設定
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -14,8 +16,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { 
-        secure: process.env.NODE_ENV === 'production', // 本番環境ではtrue
+    proxy: true,
+    cookie: {
+        secure: 'auto',
+        sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000 // 24時間
     }
 }));
@@ -127,6 +131,13 @@ app.get('/auth', async (req, res) => {
     
     req.session.codeVerifier = codeVerifier;
 
+    console.log('[auth] start', {
+        sessionId: req.sessionID,
+        hasCodeVerifier: !!req.session.codeVerifier,
+        host: req.get('host'),
+        xForwardedProto: req.get('x-forwarded-proto')
+    });
+
     const authUrl = client.authorizationUrl({
         ...authParams,
         code_challenge: codeChallenge,
@@ -143,6 +154,19 @@ app.get('/callback', async (req, res) => {
 
     const { code } = req.query;
     const codeVerifier = req.session.codeVerifier;
+
+    console.log('[callback] received', {
+        sessionId: req.sessionID,
+        hasCode: !!code,
+        hasCodeVerifier: !!codeVerifier,
+        host: req.get('host'),
+        xForwardedProto: req.get('x-forwarded-proto')
+    });
+
+    if (!codeVerifier) {
+        console.error('[callback] missing codeVerifier in session');
+        return res.redirect('/login?error=session_lost');
+    }
 
     try {
         const tokenSet = await client.callback(
@@ -173,6 +197,22 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.error('セッション破棄エラー:', err);
         }
+        res.clearCookie('connect.sid');
+
+        const clientId = process.env.COGNITO_CLIENT_ID;
+        const cognitoDomain = process.env.COGNITO_DOMAIN;
+        const logoutRedirect = process.env.COGNITO_LOGOUT_URI
+            || (process.env.COGNITO_REDIRECT_URI
+                ? process.env.COGNITO_REDIRECT_URI.replace(/\/callback$/, '/login')
+                : `http://localhost:${PORT}/login`);
+
+        if (cognitoDomain && clientId) {
+            const url = `${cognitoDomain.replace(/\/$/, '')}/logout`
+                + `?client_id=${encodeURIComponent(clientId)}`
+                + `&logout_uri=${encodeURIComponent(logoutRedirect)}`;
+            return res.redirect(url);
+        }
+
         res.redirect('/login');
     });
 });
